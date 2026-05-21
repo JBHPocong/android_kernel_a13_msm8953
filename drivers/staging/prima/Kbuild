@@ -11,6 +11,9 @@ ifeq ($(KERNEL_BUILD),1)
 	# Need to explicitly define for Kernel-based builds
 	MODNAME := wlan
 	WLAN_ROOT := drivers/staging/prima
+	# Mirror feature flags from Android build (KERNEL_BUILD=0) for consistent compilation
+	EXTRA_CFLAGS += -DFEATURE_WLAN_TDLS -DWLAN_FEATURE_ROAM_SCAN_OFFLOAD
+	EXTRA_CFLAGS += -DFEATURE_WLAN_LFR -DWLAN_FEATURE_11W
 endif
 
 ifeq ($(KERNEL_BUILD), 0)
