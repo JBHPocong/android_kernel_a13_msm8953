@@ -1012,7 +1012,7 @@ gotoAuthenticating(
 } //gotoAuthenticating
 
 #if 0
-VOID initRsnSupplicant()
+VOID initRsnSupplicant(void)
 {
 /* This is a NO-OP.  The Supplicant waits for MSG 1 */
 }
@@ -1043,7 +1043,7 @@ initRsnSupplicant
 }
 
 #if 0
-VOID initRsnAuthenticator()
+VOID initRsnAuthenticator(void)
 {
 /* Signal the Authenticator/Supplicant App that we are associated. */
 /* Use an IOCTL?  That the app is hanging a read on? Or use a "special" data packet. Again, that the app is waiting on a receive for. */
