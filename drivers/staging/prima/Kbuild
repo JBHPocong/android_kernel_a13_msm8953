@@ -56,9 +56,16 @@ ifeq ($(KERNEL_BUILD),1)
 		-DWDI_RE_ENABLE_WIFI_ON_WDI_TIMEOUT -DWLAN_OPEN_SOURCE \
 		-DCONFIG_ENABLE_LINUX_REG -DSAP_AUTH_OFFLOAD \
 		-DWLAN_FEATURE_APFIND -DFEATURE_WLAN_CH_AVOID \
-		-DWLAN_FEATURE_AP_HT40_24G -DEXISTS_MSM_SMD \
-		-DEXISTS_MSM_SMSM -DWLAN_FEATURE_OFFLOAD_PACKETS \
+		-DWLAN_FEATURE_AP_HT40_24G \
+		-DWLAN_FEATURE_OFFLOAD_PACKETS \
 		-DMDNS_OFFLOAD -DWLAN_FEATURE_HOLD_RX_WAKELOCK
+# Conditionally define SMD/SMSM flags — only if the legacy mach/ headers exist
+ifneq ($(wildcard $(srctree)/arch/$(SRCARCH)/mach-msm/include/mach/msm_smd.h),)
+EXTRA_CFLAGS += -DEXISTS_MSM_SMD
+endif
+ifneq ($(wildcard $(srctree)/arch/$(SRCARCH)/mach-msm/include/mach/msm_smsm.h),)
+EXTRA_CFLAGS += -DEXISTS_MSM_SMSM
+endif
 endif
 
 ifeq ($(KERNEL_BUILD), 0)
