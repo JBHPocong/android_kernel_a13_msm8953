@@ -1,0 +1,35 @@
+name: Build Kernel with KernelSU-Next
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Kernel Source
+        uses: actions/checkout@v4
+
+      - name: Setup Build Environment
+        run: |
+          sudo apt update
+          sudo apt install -y bc bison build-essential ccache cpio flex \
+            gcc-aarch64-linux-gnu git libelf-dev libssl-dev lz4 python3
+
+      - name: Integrate KernelSU-Next (via curl)
+        run: |
+          curl -LSs "https://raw.githubusercontent.com/JBHPocong/KernelSU-Next/legacy/kernel/setup.sh" | bash -s legacy
+
+      - name: Configure Kernel (O=out)
+        run: |
+          make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- O=out tissot_defconfig
+
+      - name: Build Kernel (O=out)
+        run: |
+          make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- O=out -j$(nproc)
+
+      - name: Upload Kernel Image
+        uses: actions/upload-artifact@v4
+        with:
+          name: kernel-Image
+          path: out/arch/arm64/boot/Image.gz-dtb
